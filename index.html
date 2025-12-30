@@ -114,10 +114,10 @@ button:hover {
 <audio id="alertSound" src="https://www.myinstants.com/media/sounds/bell.mp3"></audio>
 
 <script>
-let mygame = "N/A"; // ตัวแปรเกม
+let mygame = "N/A"; // ตัวแปรชื่อเกม
 document.getElementById("gameTitle").innerText = "จอง";
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw3x-sJfcjKDeS1rhKwmfO19H35T32H-Ua7gf-LrpBzYZFHEt1ZvggEE9uhfhGyuyER/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxy8nh4mcCchuLMwMzDHEsuaGRNmmYlLEnw0O0SAVFj4VJBwDV-_jZMGsJEQTErrINS/exec"; // 🔧 ใส่ URL จาก Apps Script
 let userName = "";
 let intervalId = null;
 
@@ -126,7 +126,7 @@ function reserve() {
     const cls = document.getElementById("class").value.trim();
 
     if (!userName || !cls) {
-        alert("กรุณากรอกชื่อและชั้น/เบอร์ติดต่อ");
+        alert("กรุณากรอกชื่อและเบอร์ติดต่อ");
         return;
     }
 
@@ -134,7 +134,7 @@ function reserve() {
     document.getElementById("spinner").classList.add("show");
     document.getElementById("queue").innerText = "กำลังโหลด…";
 
-    // ✅ encodeURIComponent เพื่อกันเลข 0 หาย
+    // ✅ ส่งข้อมูลพร้อม encode ป้องกันเลข 0 หาย
     fetch(WEB_APP_URL, {
         method: "POST",
         body: new URLSearchParams({
@@ -154,28 +154,27 @@ function reserve() {
     });
 }
 
-function notifyUser(msg) {
-    if (Notification.permission === "granted") {
-        new Notification(msg);
-    } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(p => {
-            if (p === "granted") new Notification(msg);
-        });
-    }
-}
-
 function updateQueue() {
     fetch(`${WEB_APP_URL}?name=${encodeURIComponent(userName)}&game=${mygame}`)
     .then(r => r.text())
     .then(q => {
-        const qInt = Number(q.trim());
+        q = q.trim();
         const queueEl = document.getElementById("queue");
+
+        if (q === "ERR" || q === "") {
+            queueEl.innerText = "เกิดข้อผิดพลาด";
+            document.getElementById("spinner").classList.remove("show");
+            return;
+        }
+
+        const qInt = Number(q);
 
         if (!isNaN(qInt) && qInt === 0) {
             queueEl.innerText = "ถึงคิวของคุณแล้ว 😀";
             queueEl.classList.add("highlight");
             document.getElementById("alertSound").play();
             document.getElementById("spinner").classList.remove("show");
+            clearInterval(intervalId);
         } else if (!isNaN(qInt)) {
             queueEl.innerText = qInt;
             queueEl.classList.remove("highlight");
