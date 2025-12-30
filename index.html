@@ -37,9 +37,7 @@ button {
   cursor: pointer;
   transition: 0.2s;
 }
-button:hover {
-  background: #28a239;
-}
+button:hover { background: #28a239; }
 .loading {
   position: fixed;
   inset: 0;
@@ -92,11 +90,10 @@ button:hover {
 </div>
 
 <div id="spinner" class="spinner"></div>
-
 <audio id="alertSound" src="https://www.myinstants.com/media/sounds/bell.mp3"></audio>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxd2UzxGmBgjur2TDhMa-6ei4NUR0qpQRtxQoeO4Yq0sc8XQoQYGJHmh4-Wb36lwFbp/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx5GRwBl0bh6lQLFY0vYFy464iinCm5yBz6Sh2EVUk7LIGohVMH-mvjpoFmHzQK2sFF/exec";
 let userName = "";
 let intervalId = null;
 let mygame = "N/A";
@@ -146,6 +143,7 @@ function updateQueue() {
       }
 
       const qInt = Number(q);
+
       if (!isNaN(qInt) && qInt === 0) {
         queueEl.innerText = "ถึงคิวของคุณแล้ว 😀";
         queueEl.classList.add("highlight");
@@ -153,7 +151,7 @@ function updateQueue() {
         document.getElementById("spinner").classList.remove("show");
         clearInterval(intervalId);
       } else if (!isNaN(qInt)) {
-        queueEl.innerText = qInt;
+        queueEl.innerText = qInt; // แสดงคิวเริ่มจาก 1
         queueEl.classList.remove("highlight");
       } else {
         queueEl.innerText = "เกิดข้อผิดพลาด";
