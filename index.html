@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>จองคิว</title>
-
 <style>
 body {
   margin: 0;
@@ -93,7 +92,7 @@ button:hover { background: #28a239; }
 <audio id="alertSound" src="https://www.myinstants.com/media/sounds/bell.mp3"></audio>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyH74Ra5F9SvvtnCynM9BkvsCIVd385pnoOAxdYTqJ5kK33ERDGXAsolcFJievoDxpk/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbYOUR_DEPLOYED_URL_HERE/exec";
 let userName = "";
 let intervalId = null;
 let mygame = "N/A";
@@ -144,14 +143,15 @@ function updateQueue() {
 
       const qInt = Number(q);
 
-      if (!isNaN(qInt) && qInt === -1) {
+      // ✅ ถ้าเหลือ 0 เท่านั้นถึงคิวจริง
+      if (!isNaN(qInt) && qInt === 0) {
         queueEl.innerText = "ถึงคิวของคุณแล้ว 😀";
         queueEl.classList.add("highlight");
         document.getElementById("alertSound").play();
         document.getElementById("spinner").classList.remove("show");
         clearInterval(intervalId);
       } else if (!isNaN(qInt)) {
-        queueEl.innerText = qInt; // แสดงว่ารออีกกี่คิว
+        queueEl.innerText = `เหลืออีก ${qInt}`; // เช่น เหลืออีก 1, 2, 3...
         queueEl.classList.remove("highlight");
       } else {
         queueEl.innerText = "เกิดข้อผิดพลาด";
